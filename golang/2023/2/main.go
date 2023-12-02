@@ -80,7 +80,7 @@ func validateSamples(samples []string) bool {
 	return gameIsValid
 }
 
-func main() {
+func part1() {
 	input := readInput()
 	sum := 0
 	for _, line := range input {
@@ -97,4 +97,54 @@ func main() {
 		}
 	}
 	fmt.Println("Result:", sum)
+}
+
+func getPowerOfSample(samples []string) int {
+	maxCountOfColor := map[string]int{
+		"green": 0,
+		"red":   0,
+		"blue":  0,
+	}
+	re := regexp.MustCompile(`\b\d+\s(green|blue|red)\b`)
+	reDigits := regexp.MustCompile(`\d+`)
+	reColors := regexp.MustCompile(`\b(green|blue|red)\b`)
+	for _, sample := range samples {
+		compiledSamples := re.FindAllString(sample, -1)
+		for _, compiledSample := range compiledSamples {
+			sampleSize := reDigits.FindString(compiledSample)
+			sampleColor := reColors.FindString(compiledSample)
+
+			iSampleSize, err := strconv.Atoi(sampleSize)
+			if err != nil {
+				log.Fatal("String to integer conversion failed: ", err)
+			}
+
+			if iSampleSize > maxCountOfColor[sampleColor] {
+				maxCountOfColor[sampleColor] = iSampleSize
+			}
+		}
+	}
+	product := 1
+	for _, value := range maxCountOfColor {
+		product *= value
+	}
+	return product
+}
+
+func part2() {
+	input := readInput()
+	sum := 0
+	for _, line := range input {
+		gameData := extractGameData(line)
+		samples := extractSamples(gameData)
+		powerOfSample := getPowerOfSample(samples)
+		sum += powerOfSample
+
+	}
+	fmt.Println("Result:", sum)
+
+}
+func main() {
+	part1()
+	part2()
 }
