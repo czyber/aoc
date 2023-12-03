@@ -1,8 +1,9 @@
 package main
 
 type Symbol struct {
-	Value   string
-	Indices []int
+	Value         string
+	Indices       []int
+	AdjacentParts []Part
 }
 
 func (s Symbol) getYOffset() int {
@@ -25,4 +26,23 @@ func (s Symbol) isNextTo(p Part) bool {
 		}
 	}
 	return false
+}
+
+func (s Symbol) isNextToSymbol(s2 Symbol) bool {
+	if s.getYOffset() == s2.getYOffset() && (s.getXOffset() == s2.getXOffset()+1 || s.getXOffset() == s2.getXOffset()-1) {
+		return true
+	} else if (s.getYOffset() == s2.getYOffset()+1 || s.getYOffset() == s2.getYOffset()-1) && (s.getXOffset() == s2.getXOffset()+1 || s.getXOffset() == s2.getXOffset()-1) {
+		return true
+	} else if (s.getYOffset() == s2.getYOffset()+1 || s.getYOffset() == s2.getYOffset()-1) && s.getXOffset() == s2.getXOffset() {
+		return true
+	}
+	return false
+}
+
+func (s Symbol) getGearProduct() int {
+	product := 1
+	for _, part := range s.AdjacentParts {
+		product *= part.Value
+	}
+	return product
 }

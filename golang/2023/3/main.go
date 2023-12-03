@@ -72,6 +72,21 @@ func part1() {
 	fmt.Println(sum)
 }
 
+func part2() {
+	inputString, err := aocdownloader.GetInput("2023", "3")
+
+	if err != nil {
+		log.Fatal("Error retrieving input: ", err)
+	}
+
+	input := strings.Split(inputString, "\n")
+
+	engineSchematic := buildEngineSchematic(input)
+	sum := engineSchematic.buildGearSum()
+	fmt.Println(sum)
+}
+
 func main() {
 	part1()
+	part2()
 }

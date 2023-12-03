@@ -48,3 +48,25 @@ func (e EngineSchematic) buildPartSum() int {
 	}
 	return sum
 }
+
+func (e EngineSchematic) isGear(s *Symbol) bool {
+	for _, part := range e.parts {
+		if s.isNextTo(part) {
+			s.AdjacentParts = append(s.AdjacentParts, part)
+		}
+	}
+	return len(s.AdjacentParts) == 2
+}
+
+func (e EngineSchematic) buildGearSum() int {
+	isGear := false
+	sum := 0
+	for _, symbol := range e.getSymbols() {
+		isGear = e.isGear(&symbol)
+
+		if isGear {
+			sum += symbol.getGearProduct()
+		}
+	}
+	return sum
+}
